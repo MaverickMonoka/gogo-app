@@ -1,0 +1,1 @@
+module.exports=async function handler(req,res){res.status(200).json({service:"gogo",status:"ok",payments:Boolean(process.env.MOBICOM_PAY_URL),time:new Date().toISOString()})}
