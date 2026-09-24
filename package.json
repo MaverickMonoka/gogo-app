@@ -1,1 +1,1 @@
-{"name":"gogo-app","version":"0.1.0","private":true,"scripts":{"start":"npx serve .","build":"echo static-build-ready"},"dependencies":{},"devDependencies":{}}
+{"name":"gogo-app","version":"0.2.0","private":true,"scripts":{"start":"npx serve .","build":"echo static-build-ready","test":"node --test tests/*.test.mjs"},"dependencies":{"@supabase/supabase-js":"2.116.0"},"devDependencies":{}}
