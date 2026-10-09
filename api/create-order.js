@@ -10,7 +10,9 @@ module.exports=async function handler(req,res){
  try{
   const {customer,phone,email,address,fulfilment="Delivery",items=[]}=req.body||{};
   if(!customer||!phone||!address||!Array.isArray(items)||!items.length) return res.status(400).json({error:"Missing checkout details"});
-  const clean=items.map(i=>({id:Number(i.id),name:String(i.n||i.name||""),qty:Math.max(1,Number(i.q)||1),unitPrice:Number(i.p||i.unitPrice||0)}));
+  const prices=[104.99,59.99,59.99,109.99,23,79.99,42.99,169.99,209.99,79.99,31.99,79.99,69.99,69.99,22,99.99];
+  if(items.some(i=>!Number.isInteger(i.id)||i.id<1||i.id>prices.length||!Number.isInteger(i.q)||i.q<1||i.q>99))return res.status(400).json({error:"Invalid basket"});
+  const clean=items.map(i=>({id:i.id,name:String(i.n||i.name||""),qty:i.q,unitPrice:prices[i.id-1]}));
   const subtotal=clean.reduce((s,i)=>s+i.unitPrice*i.qty,0),delivery=fulfilment==="Collection"?0:35,total=subtotal+delivery;
   const orderId="GOGO-"+Date.now().toString().slice(-8)+"-"+crypto.randomBytes(2).toString("hex").toUpperCase();
   const order={id:orderId,customer,phone,email:email||null,address,fulfilment,items:clean,subtotal,delivery,total,currency:"ZAR",status:"payment_pending",createdAt:new Date().toISOString()};

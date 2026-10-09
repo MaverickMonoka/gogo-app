@@ -1,0 +1,174 @@
+[
+  {
+    "id": 1,
+    "n": "Familia Guesthouse & Boutique Hotel",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 2,
+    "n": "Wilson Guest House",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 3,
+    "n": "Guesthouse 52",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 4,
+    "n": "Lighthouse Guesthouse & Cafe",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 5,
+    "n": "Lion's Guesthouse",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 6,
+    "n": "Ya Rena Guest House",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 7,
+    "n": "Ebenezer Guesthouse",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 8,
+    "n": "Kwena Guesthouse",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 9,
+    "n": "Godiva Spa & Guesthouse",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 10,
+    "n": "Soma Guesthouse",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 11,
+    "n": "Sunny Stay",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 12,
+    "n": "KB Guesthouse",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 13,
+    "n": "Karabelo Guesthouse",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 14,
+    "n": "Samama Guesthouse",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 15,
+    "n": "Olikaya Guest House",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 16,
+    "n": "Cycad Self Catering",
+    "area": "Groblersdal",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 17,
+    "n": "Yami Nawe Lodge",
+    "area": "Dennilton",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 18,
+    "n": "Tafelkop Guest House",
+    "area": "Tafelkop",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 19,
+    "n": "Mogwaa Sediba Guest House",
+    "area": "Tafelkop",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 20,
+    "n": "Sedupe sa Kopa Guesthouse",
+    "area": "Tafelkop",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  },
+  {
+    "id": 21,
+    "n": "Kingdoms Lodge",
+    "area": "Groblersdal",
+    "address": "R33 / N11, Krokodilsdrift Farm Portion 5",
+    "phone": "013 110 2013",
+    "whatsapp": "083 235 7449",
+    "website": "https://kingdomslodge.co.za",
+    "from": null,
+    "verifiedRates": false,
+    "bookingEnabled": false
+  }
+]
