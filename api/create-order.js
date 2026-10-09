@@ -26,7 +26,7 @@ module.exports=async function handler(req,res){
   const base=(process.env.MOBICOM_PAY_URL||"").replace(/\/$/,""),apiKey=process.env.MOBICOM_PAY_API_KEY;
   if(!base||!apiKey) return res.status(503).json({error:"Payment gateway is not yet activated. Your order reference is "+orderId+"; no payment was taken."});
   const origin=(process.env.GOGO_APP_URL||("https://"+req.headers.host)).replace(/\/$/,"");
-  const pay=await fetch(base+"/api/v1/payments",{method:"POST",headers:{"Authorization":"Bearer "+apiKey,"Idempotency-Key":orderId,"Content-Type":"application/json"},body:JSON.stringify({amount_cents:Math.round(total*100),currency:"ZAR",description:"GoGo order "+orderId,external_reference:orderId,customer_email:email||undefined,return_url:origin+"/?payment=return&order="+encodeURIComponent(orderId),cancel_url:origin+"/?payment=cancel&order="+encodeURIComponent(orderId),metadata:{channel:"gogo",fulfilment}})});
+  const pay=await fetch(base+"/api/v1/payments",{method:"POST",headers:{"Authorization":"Bearer "+apiKey,"Idempotency-Key":orderId,"Content-Type":"application/json"},body:JSON.stringify({amount_cents:Math.round(total*100),currency:"ZAR",description:"GoGo order "+orderId,external_reference:orderId,customer_email:email||undefined,success_url:origin+"/?payment=return&order="+encodeURIComponent(orderId),cancel_url:origin+"/?payment=cancel&order="+encodeURIComponent(orderId),webhook_url:origin+"/api/payments/mobicom/webhook",merchant_reference:orderId,metadata:{channel:"gogo",fulfilment}})});
   const payment=await pay.json();
   if(!pay.ok) throw new Error("Payment creation failed");
   if(database) await database.from("gogo_orders").update({payment_id:payment.id}).eq("id",orderId);
