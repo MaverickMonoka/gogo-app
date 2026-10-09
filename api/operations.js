@@ -27,3 +27,6 @@ module.exports=async(req,res)=>{
  const update={status};if(role==='driver'&&status==='out_for_delivery'){update.driver_name=String(driver_name||'').slice(0,100);update.driver_phone=String(driver_phone||'').slice(0,30)}
  const result=await database().query('UPDATE gogo_orders SET status=$1,driver_name=COALESCE($2,driver_name),driver_phone=COALESCE($3,driver_phone) WHERE id=$4 AND status=$5 RETURNING id,status',[status,update.driver_name||null,update.driver_phone||null,id,order.status]);
  if(!result.rowCount)return res.status(409).json({error:'Order changed. Refresh and retry.'});
+ return res.status(200).json({order:result.rows[0]});
+ }catch(e){return res.status(500).json({error:'Dashboard request failed'});}
+};
