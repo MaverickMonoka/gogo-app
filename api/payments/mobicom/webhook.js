@@ -1,10 +1,11 @@
 const crypto=require('node:crypto');
+module.exports.config={api:{bodyParser:false}};
 const {createClient}=require('@supabase/supabase-js');
 module.exports=async function handler(req,res){
  if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
  const secret=process.env.MOBICOM_PAY_WEBHOOK_SECRET;
  if(!secret)return res.status(503).json({error:'Webhook not configured'});
- const raw=typeof req.body==='string'?req.body:JSON.stringify(req.body||{});
+ const chunks=[];for await(const chunk of req)chunks.push(chunk);const raw=Buffer.concat(chunks).toString('utf8');
  const supplied=String(req.headers['x-mobicom-signature']||'').replace(/^sha256=/,'');
  if(!/^[a-f0-9]{64}$/i.test(supplied))return res.status(401).json({error:'Invalid signature'});
  const expected=crypto.createHmac('sha256',secret).update(raw).digest('hex');
