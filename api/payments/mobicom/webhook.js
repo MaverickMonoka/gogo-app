@@ -1,6 +1,6 @@
 const crypto=require('node:crypto');
 module.exports.config={api:{bodyParser:false}};
-const {createClient}=require('@supabase/supabase-js');
+const {database}=require('../../../lib/database');
 module.exports=async function handler(req,res){
  if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
  const secret=process.env.MOBICOM_PAY_WEBHOOK_SECRET;
@@ -13,16 +13,12 @@ module.exports=async function handler(req,res){
  let event;try{event=JSON.parse(raw)}catch{return res.status(400).json({error:'Invalid event'})}
  const id=event?.data?.merchant_reference;const amount=event?.data?.amount_minor;
  if(!id||!Number.isInteger(amount)||!['payment.paid','payment.failed'].includes(event.event_type))return res.status(400).json({error:'Invalid payment event'});
- const url=process.env.GOGO_SUPABASE_URL,key=process.env.GOGO_SUPABASE_SECRET_KEY;
- if(!url||!key)return res.status(503).json({error:'Database unavailable'});
- const db=createClient(url,key,{auth:{persistSession:false}});
- const {data:order,error:findError}=await db.from('gogo_orders').select('id,status,total_cents').eq('id',id).maybeSingle();
- if(findError)return res.status(503).json({error:'Database read failed'});
+ if(!process.env.DATABASE_URL)return res.status(503).json({error:'Database unavailable'});
+ const result=await database().query('SELECT id,status,total_cents FROM gogo_orders WHERE id=$1',[id]);const order=result.rows[0];
  if(!order)return res.status(404).json({error:'Order not found'});
  if(order.total_cents!==amount)return res.status(409).json({error:'Amount mismatch'});
  if(order.status==='paid'||!['payment_pending','payment_failed'].includes(order.status))return res.status(200).json({ok:true,unchanged:true});
  const status=event.event_type==='payment.paid'?'paid':'payment_failed';
- const {error}=await db.from('gogo_orders').update({status,payment_id:String(event.data.id||'')}).eq('id',id).in('status',['payment_pending','payment_failed']);
- if(error)return res.status(503).json({error:'Database update failed'});
+ await database().query("UPDATE gogo_orders SET status=$1,payment_id=$2 WHERE id=$3 AND status IN ('payment_pending','payment_failed')",[status,String(event.data.id||''),id]);
  return res.status(200).json({ok:true});
 };
