@@ -1,5 +1,4 @@
 const crypto=require('node:crypto');
-module.exports.config={api:{bodyParser:false}};
 const {database}=require('../../../lib/database');
 module.exports=async function handler(req,res){
  if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
@@ -22,3 +21,5 @@ module.exports=async function handler(req,res){
  await database().query("UPDATE gogo_orders SET status=$1,payment_id=$2 WHERE id=$3 AND status IN ('payment_pending','payment_failed')",[status,String(event.data.id||''),id]);
  return res.status(200).json({ok:true});
 };
+
+module.exports.config={api:{bodyParser:false}};
