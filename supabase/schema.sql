@@ -17,3 +17,7 @@ create table if not exists public.gogo_orders (
 create index if not exists gogo_orders_created_at_idx on public.gogo_orders(created_at desc);
 alter table public.gogo_orders enable row level security;
 -- No public read/write policies. Only server-side service-role may access orders.
+
+-- Dispatch fields for merchant and driver dashboards.
+alter table public.gogo_orders add column if not exists driver_name text;
+alter table public.gogo_orders add column if not exists driver_phone text;
