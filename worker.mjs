@@ -19,7 +19,7 @@ const handlers={
  '/api/create-order':createOrder,
  '/api/payments/mobicom/webhook':webhook
 };
-function respond(handler,request,url,raw){
+function respond(handler,request,url,raw,env){
  return new Promise((resolve,reject)=>{
   const headers=new Headers({'content-type':'application/json; charset=utf-8'});
   let status=200,finished=false;
@@ -31,6 +31,7 @@ function respond(handler,request,url,raw){
   };
   const req={
    method:request.method,
+   cloudflareEnv:env,
    headers:Object.fromEntries(request.headers.entries()),
    query:Object.fromEntries(url.searchParams.entries()),
    body:undefined,
@@ -62,7 +63,7 @@ export default {
   try{
    const raw=request.method==='GET'?new Uint8Array():new Uint8Array(await request.arrayBuffer());
    if(raw.byteLength>262144)return Response.json({error:'Request too large'},{status:413});
-   return await respond(handler,request,url,raw);
+   return await respond(handler,request,url,raw,env);
   }catch(e){console.error('GoGo Worker API error',e);return Response.json({error:'Service temporarily unavailable'},{status:503})}
  }
 };
