@@ -1,5 +1,5 @@
 const crypto=require('node:crypto');
-const {database}=require('../../../lib/database');
+const {database,hasDatabase}=require('../../../lib/database');
 module.exports=async function handler(req,res){
  if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
  const secret=process.env.MOBICOM_PAY_WEBHOOK_SECRET;
@@ -12,7 +12,7 @@ module.exports=async function handler(req,res){
  let event;try{event=JSON.parse(raw)}catch{return res.status(400).json({error:'Invalid event'})}
  const id=event?.data?.merchant_reference;const amount=event?.data?.amount_minor;
  if(!id||!Number.isInteger(amount)||!['payment.paid','payment.failed'].includes(event.event_type))return res.status(400).json({error:'Invalid payment event'});
- if(!process.env.DATABASE_URL)return res.status(503).json({error:'Database unavailable'});
+ if(!hasDatabase())return res.status(503).json({error:'Database unavailable'});
  const result=await database().query('SELECT id,status,total_cents FROM gogo_orders WHERE id=$1',[id]);const order=result.rows[0];
  if(!order)return res.status(404).json({error:'Order not found'});
  if(order.total_cents!==amount)return res.status(409).json({error:'Amount mismatch'});
