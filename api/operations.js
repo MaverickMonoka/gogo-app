@@ -7,7 +7,7 @@ module.exports=async(req,res)=>{
  const role=String(req.query.role||'');if(!roles.includes(role))return res.status(400).json({error:'Invalid role'});
  const token=String(req.headers.authorization||'').replace(/^Bearer /i,'');const expected=process.env[role==='merchant'?'GOGO_MERCHANT_TOKEN':'GOGO_DRIVER_TOKEN'];
  if(!expected||!token||Buffer.byteLength(token)!==Buffer.byteLength(expected)||!crypto.timingSafeEqual(Buffer.from(token),Buffer.from(expected)))return res.status(401).json({error:'Access denied. Configure dashboard credentials.'});
- if(!process.env.DATABASE_URL)return res.status(503).json({error:'Neon database not configured'});
+ if(!process.env.DATABASE_URL)return res.status(503).json({error:'Cloudflare D1 binding not configured'});
  try{
  if(req.method==='GET'){
   const driver=role==='driver';
