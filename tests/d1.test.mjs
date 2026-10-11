@@ -1,6 +1,7 @@
-const test=require('node:test');
-const assert=require('node:assert/strict');
-const {compile,withDatabaseEnv,database,hasDatabase}=require('../lib/database');
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import dbModule from '../lib/database.js';
+const {compile,withDatabaseEnv,database,hasDatabase}=dbModule;
 test('postgres numbered parameters become D1 positional parameters',()=>{
  assert.deepEqual(compile('UPDATE gogo_orders SET status=$1 WHERE id=$2 AND status=$1',['paid','ABC']),{sql:'UPDATE gogo_orders SET status=? WHERE id=? AND status=?',bind:['paid','ABC','paid']});
 });
