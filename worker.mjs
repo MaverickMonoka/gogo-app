@@ -1,3 +1,4 @@
+import d1Context from './lib/database.js';
 // Cloudflare Worker adapter for GoGo's existing Node-style API handlers.
 // Requires nodejs_compat and nodejs_compat_populate_process_env.
 import health from './api/health.js';
@@ -63,7 +64,7 @@ export default {
   try{
    const raw=request.method==='GET'?new Uint8Array():new Uint8Array(await request.arrayBuffer());
    if(raw.byteLength>262144)return Response.json({error:'Request too large'},{status:413});
-   return await respond(handler,request,url,raw,env);
+   return await d1Context.withDatabaseEnv(env,()=>respond(handler,request,url,raw,env));
   }catch(e){console.error('GoGo Worker API error',e);return Response.json({error:'Service temporarily unavailable'},{status:503})}
  }
 };
