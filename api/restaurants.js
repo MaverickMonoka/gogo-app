@@ -1,7 +1,7 @@
 const crypto=require('crypto');
 const {database}=require('../lib/database');
 const clean=(v,n=150)=>String(v||'').trim().slice(0,n);
-const admin=req=>{const key=process.env.GOGO_RESTAURANT_ADMIN_TOKEN;const auth=req.headers.authorization||'';return Boolean(key&&auth==='Bearer '+key)};
+const admin=req=>{const key=req.cloudflareEnv?.GOGO_RESTAURANT_ADMIN_TOKEN||process.env.GOGO_RESTAURANT_ADMIN_TOKEN;const auth=req.headers.authorization||'';return Boolean(key&&auth==='Bearer '+key)};
 module.exports=async(req,res)=>{
  res.setHeader('Cache-Control','no-store');
  try{
