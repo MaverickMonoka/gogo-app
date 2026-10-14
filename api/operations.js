@@ -1,13 +1,13 @@
-const {database}=require('../lib/database');
+const {database,hasDatabase}=require('../lib/database');
 const crypto=require('node:crypto');
 const roles=['merchant','driver'];
 const transitions={payment_pending:[],paid:['accepted','cancelled'],accepted:['preparing','cancelled'],preparing:['ready'],ready:['out_for_delivery','collected'],out_for_delivery:['delivered'],delivered:[],collected:[],cancelled:[]};
 module.exports=async(req,res)=>{
  res.setHeader('Cache-Control','no-store');
  const role=String(req.query.role||'');if(!roles.includes(role))return res.status(400).json({error:'Invalid role'});
- const token=String(req.headers.authorization||'').replace(/^Bearer /i,'');const expected=process.env[role==='merchant'?'GOGO_MERCHANT_TOKEN':'GOGO_DRIVER_TOKEN'];
+ const token=String(req.headers.authorization||'').replace(/^Bearer /i,'');const credential=role==='merchant'?'GOGO_MERCHANT_TOKEN':'GOGO_DRIVER_TOKEN';const expected=req.cloudflareEnv?.[credential]||process.env[credential];
  if(!expected||!token||Buffer.byteLength(token)!==Buffer.byteLength(expected)||!crypto.timingSafeEqual(Buffer.from(token),Buffer.from(expected)))return res.status(401).json({error:'Access denied. Configure dashboard credentials.'});
- if(!process.env.DATABASE_URL)return res.status(503).json({error:'Cloudflare D1 binding not configured'});
+ if(!hasDatabase())return res.status(503).json({error:'Cloudflare D1 binding Gogo is not configured'});
  try{
  if(req.method==='GET'){
   const driver=role==='driver';
