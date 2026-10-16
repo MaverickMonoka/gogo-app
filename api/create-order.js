@@ -14,7 +14,7 @@ module.exports=async function handler(req,res){
   const subtotal=clean.reduce((s,i)=>s+i.unitPrice*i.qty,0),delivery=fulfilment==="Collection"?0:35,total=subtotal+delivery;
   const orderId="GOGO-"+Date.now().toString().slice(-8)+"-"+crypto.randomBytes(2).toString("hex").toUpperCase();
   const order={id:orderId,customer,phone,email:email||null,address,fulfilment,items:clean,subtotal,delivery,total,currency:"ZAR",status:"payment_pending",createdAt:new Date().toISOString()};
-  if(!hasDatabase())return res.status(503).json({error:"Ordering is not yet activated. Cloudflare D1 binding DB is required."});
+  if(!hasDatabase())return res.status(503).json({error:"Ordering is not yet activated. Cloudflare D1 binding Gogo is required."});
   await database().query('INSERT INTO gogo_orders(id,customer_name,phone,email,address,fulfilment,items,subtotal_cents,delivery_cents,total_cents,status) VALUES($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9,$10,$11)',[orderId,customer,phone,email||null,address,fulfilment,JSON.stringify(clean),Math.round(subtotal*100),Math.round(delivery*100),Math.round(total*100),'payment_pending']);
   const base=(process.env.MOBICOM_PAY_URL||"").replace(/\/$/,""),apiKey=process.env.MOBICOM_PAY_API_KEY;
   if(!base||!apiKey) return res.status(503).json({error:"Payment gateway is not yet activated. Your order reference is "+orderId+"; no payment was taken."});
