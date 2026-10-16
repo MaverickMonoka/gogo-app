@@ -4,7 +4,7 @@ const safe=(v,max)=>String(v||'').trim().slice(0,max);
 module.exports=async(req,res)=>{
  res.setHeader('Cache-Control','no-store');
  if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
- if(!hasDatabase())return res.status(503).json({error:'Neon connection not configured'});
+ if(!hasDatabase())return res.status(503).json({error:'Cloudflare D1 binding Gogo is not configured'});
  const b=req.body||{},type=b.booking_type,when=type==='now'?new Date():new Date(b.pickup_at);
  const name=safe(b.rider_name,100),phone=safe(b.rider_phone,30),pickup=safe(b.pickup,250),destination=safe(b.destination,250),lodge=safe(b.lodge_name,150),notes=safe(b.notes,400),vehicle=b.vehicle_type||'car',passengers=Number(b.passengers||1);
  if(!['now','scheduled'].includes(type)||!name||!/^\\+?[0-9 ()-]{8,25}$/.test(phone)||!pickup||!destination||pickup.toLowerCase()===destination.toLowerCase()||!['car','shuttle'].includes(vehicle)||!Number.isInteger(passengers)||passengers<1||passengers>12||!Number.isFinite(when.getTime()))return res.status(400).json({error:'Check the booking details'});

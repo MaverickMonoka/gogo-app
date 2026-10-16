@@ -52,8 +52,8 @@ function respond(handler,request,url,raw,env){
 export default {
  async fetch(request,env){
   // Cloudflare secrets are Worker bindings, not necessarily populated in process.env.
-  // Existing Node-style handlers read process.env, so bridge the configured bindings.
-  for(const name of ['DATABASE_URL','GOGO_DRIVER_TOKEN','GOGO_MERCHANT_TOKEN','GOGO_RESTAURANT_ADMIN_TOKEN','MOBICOM_PAY_URL','MOBICOM_PAY_API_KEY','MOBICOM_PAY_WEBHOOK_SECRET']){
+  // Existing Node-style handlers read process.env, so bridge payment secrets only.
+  for(const name of ['GOGO_DRIVER_TOKEN','GOGO_MERCHANT_TOKEN','GOGO_RESTAURANT_ADMIN_TOKEN','MOBICOM_PAY_URL','MOBICOM_PAY_API_KEY','MOBICOM_PAY_WEBHOOK_SECRET']){
    if(typeof env[name]==='string' && env[name])process.env[name]=env[name];
   }
   const url=new URL(request.url);
