@@ -9,7 +9,7 @@
 3. Create a database named `gogo-db`.
 4. Configure the D1 binding for the **gogo-app Worker** with the variable name exactly `Gogo`. The code, health check and tests all use this case-sensitive binding name.
 5. Record the D1 database ID. It must be added to the Wrangler configuration before a reproducible CLI/Git-integrated deployment can be considered complete. Do not put a fake ID or a production secret in source control.
-6. From the repository root, apply the schema with `npx wrangler d1 execute gogo-db --remote --file=migrations/0001_d1_schema.sql`. Confirm the tables exist before enabling order or ride workflows.
+6. From the repository root, apply both migrations in order: `npx wrangler d1 execute gogo-db --remote --file=migrations/0001_d1_schema.sql` then `npx wrangler d1 execute gogo-db --remote --file=migrations/0002_grocery_catalog.sql`. The second migration creates the database-backed grocery catalogue, seeds the prototype products, and adds payment-method/status columns. Confirm the tables and seeded products exist before enabling checkout.
 7. Run `npm install`, `npm test` and `npm run build`. Deploy only after the real database ID and binding are configured.
 8. Verify `/api/health` reports `databaseBindingPresent:true`, then manually test a grocery order, ride request, lodge registration, restaurant registration and merchant/driver operations. Health checks only confirm binding presence, not full database correctness.
 9. Configure `GOGO_DRIVER_TOKEN`, `GOGO_MERCHANT_TOKEN`, `GOGO_RESTAURANT_ADMIN_TOKEN`, `MOBICOM_PAY_URL`, `MOBICOM_PAY_API_KEY`, and `MOBICOM_PAY_WEBHOOK_SECRET` as Worker secrets/variables. Do not enable payment until the complete sandbox flow and signed webhook are tested.
@@ -24,5 +24,6 @@
 
 - `lib/database.js` translates the current PostgreSQL-style numbered placeholders and supported array predicate into D1-compatible SQLite SQL.
 - D1 uses integer cents for monetary columns.
-- The production D1 binding ID is not yet recorded in this repository; this remains a deployment blocker.
+- The production D1 binding ID is not yet recorded in Wrangler configuration. The dashboard binding can work, but reproducible Git-based deployment still needs the actual database ID recorded in configuration.
+- Initial grocery prices are carried over from the prototype and must be verified by Moratiwa SUPERSPAR before launch. Product images can be added through the merchant catalogue panel.
 - Shared dashboard tokens are prototype credentials, not tenant-specific merchant authentication. Do not distribute them to independent merchants.
