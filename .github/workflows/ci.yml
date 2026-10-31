@@ -14,3 +14,5 @@ jobs:
       - run: npm install
       - run: npm test
       - run: npm run build
+      - name: Validate Cloudflare Worker bundle
+        run: npx wrangler deploy --dry-run
