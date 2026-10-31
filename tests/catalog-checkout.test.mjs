@@ -1,19 +1,26 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { withDatabaseEnv } from '../lib/database.js';
+import dbModule from '../lib/database.js';
 import createOrder from '../api/create-order.js';
+const {withDatabaseEnv}=dbModule;
 
 test('cash-on-delivery checkout uses D1 catalogue prices, not client basket prices', async()=>{
  const writes=[];
  const d1={
   prepare(sql){
-   return {bind(...args){return {async all(){
-    if(sql.includes('FROM gogo_products')){
-     return {success:true,results:[{id:1,name:'Apples',category:'Produce',unit:'1 kg',price_cents:500,image_url:null}]};
+   return {
+    bind(...args){
+     return {
+      async all(){
+       if(sql.includes('FROM gogo_products')){
+        return {success:true,results:[{id:1,name:'Apples',category:'Produce',unit:'1 kg',price_cents:500,image_url:null}]};
+       }
+       writes.push({sql,args});
+       return {success:true,results:[]};
+      }
+     };
     }
-    writes.push({sql,args});
-    return {success:true,results:[]};
-   }}}
+   };
   }
  };
  const req={method:'POST',body:{customer:'Test Customer',phone:'0821234567',email:'test@example.com',address:'Groblersdal',fulfilment:'Delivery',payment_method:'cash_on_delivery',items:[{id:1,q:2,n:'Fake item',p:0}]}};
