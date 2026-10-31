@@ -1,4 +1,8 @@
--- Live grocery catalogue for GoGo. Seed prices are carried over from the prototype and must be confirmed by the merchant before launch.
+-- Live grocery catalogue and checkout payment methods for GoGo.
+-- Apply after 0001_d1_schema.sql.
+ALTER TABLE gogo_orders ADD COLUMN payment_method TEXT NOT NULL DEFAULT 'mobicom_pay';
+ALTER TABLE gogo_orders ADD COLUMN payment_status TEXT NOT NULL DEFAULT 'pending';
+
 CREATE TABLE IF NOT EXISTS gogo_products (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   sku TEXT UNIQUE,
