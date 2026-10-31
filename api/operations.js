@@ -1,7 +1,7 @@
 const {database,hasDatabase}=require('../lib/database');
 const crypto=require('node:crypto');
 const roles=['merchant','driver'];
-const transitions={payment_pending:[],paid:['accepted','cancelled'],accepted:['preparing','cancelled'],preparing:['ready'],ready:['out_for_delivery','collected'],out_for_delivery:['delivered'],delivered:[],collected:[],cancelled:[]};
+const transitions={payment_pending:[],placed:['accepted','cancelled'],paid:['accepted','cancelled'],accepted:['preparing','cancelled'],preparing:['ready'],ready:['out_for_delivery','collected'],out_for_delivery:['delivered'],delivered:[],collected:[],cancelled:[]};
 module.exports=async(req,res)=>{
  res.setHeader('Cache-Control','no-store');
  const role=String(req.query.role||'');if(!roles.includes(role))return res.status(400).json({error:'Invalid role'});

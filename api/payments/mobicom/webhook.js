@@ -18,7 +18,8 @@ module.exports=async function handler(req,res){
  if(order.total_cents!==amount)return res.status(409).json({error:'Amount mismatch'});
  if(order.status==='paid'||!['payment_pending','payment_failed'].includes(order.status))return res.status(200).json({ok:true,unchanged:true});
  const status=event.event_type==='payment.paid'?'paid':'payment_failed';
- await database().query("UPDATE gogo_orders SET status=$1,payment_id=$2 WHERE id=$3 AND status IN ('payment_pending','payment_failed')",[status,String(event.data.id||''),id]);
+ const paymentStatus=event.event_type==='payment.paid'?'paid':'failed';
+ await database().query("UPDATE gogo_orders SET status=$1,payment_status=$2,payment_id=$3 WHERE id=$4 AND status IN ('payment_pending','payment_failed')",[status,paymentStatus,String(event.data.id||''),id]);
  return res.status(200).json({ok:true});
 };
 
