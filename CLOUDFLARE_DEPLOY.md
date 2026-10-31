@@ -8,7 +8,7 @@ GoGo is hosted on Cloudflare Workers and uses Cloudflare D1 as its production da
 2. Create a D1 database named `gogo-db`.
 3. Add a D1 binding with variable name exactly `Gogo`. This name is case-sensitive and must match `lib/database.js`, `api/health.js`, and the D1 tests.
 4. Capture the actual D1 database ID and add it to the Wrangler configuration before relying on automated deployments. A dashboard-only binding without a reproducible configuration is not a complete release setup.
-5. Apply `migrations/0001_d1_schema.sql` to the remote D1 database.
+5. Apply `migrations/0001_d1_schema.sql` and then `migrations/0002_grocery_catalog.sql` to the remote D1 database.
 6. Configure the following Worker secrets/variables:
    - `GOGO_RESTAURANT_ADMIN_TOKEN` — long random admin token.
    - `GOGO_DRIVER_TOKEN` and `GOGO_MERCHANT_TOKEN` — long random prototype dashboard tokens.
@@ -28,8 +28,9 @@ GoGo is hosted on Cloudflare Workers and uses Cloudflare D1 as its production da
 
 ## Known release blockers
 
-- The real D1 database ID is not yet stored in Wrangler configuration.
-- The schema migration creates empty tables and does not copy existing Neon data.
+- The real D1 database ID is not yet stored in Wrangler configuration for reproducible Git-based deployment.
+- The initial grocery seed prices are prototype values and require merchant confirmation. Product images must be supplied/confirmed by the merchant.
+- The schema migrations create tables and initial sample catalogue records; they do not copy existing Neon orders, users, rides, menus, or partner data.
 - The payment flow and signed webhook need end-to-end sandbox verification.
 - Shared dashboard tokens are prototype credentials, not tenant-specific merchant authentication.
 - Ride route previews are not live GPS tracking.
